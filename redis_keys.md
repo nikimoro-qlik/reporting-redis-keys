@@ -3,11 +3,11 @@
 ## Task Queues
 | Key Name | Type | Description | Can be sharded by... | Contains PII? | Used by LUA scripts? | Migrated to ElastiCache with TLV-938? |
 |---------|---------|---------|---------|---------|---------|---------|
-| `reporting:ReportRequests` | List | Circular list of tenants in the queue, to implement Round Robin between shards | queue name | No | **Yes** (getMaxScript, getBatchScript, storeAndConsumeScript,  No |removeFromQueueScript, lenScript, moveScript, parkScript, parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript) |
+| `reporting:ReportRequests` | List | Circular list of tenants in the queue, to implement Round Robin between shards | queue name | No | **Yes** (getMaxScript, getBatchScript, storeAndConsumeScript, removeFromQueueScript, lenScript, moveScript, parkScript, parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript) | No |
 | `reporting:ReportRequests:deficit` | Hash | Keeps shard's deficit, to implement fairness | queue name | No | **Yes** (getMaxScript, getBatchScript, removeFromQueueScript, getDeficitsScript) | No |
-| `reporting:ReportRequests:blacklist:<SHARD_ID>` | String | Used to flag a shard as blacklisted, no items will be dequeued for it | queue name | No | **Yes** (getMaxScript, getBatchScript,  No |appendShardsToBlackListScript, getBlackListValuesByShardName, getBlackListedShardsListWithValues) |
+| `reporting:ReportRequests:blacklist:<SHARD_ID>` | String | Used to flag a shard as blacklisted, no items will be dequeued for it | queue name | No | **Yes** (getMaxScript, getBatchScript, appendShardsToBlackListScript, getBlackListValuesByShardName, getBlackListedShardsListWithValues) | No |
 | `reporting:ReportRequests:producecheck` | String | ??? | queue name | No | **Yes** (produceWidthIDScript) | No |
-| `reporting:ReportRequests_<SHARD_ID>` | SortedSet | Used to store enqueued items for every shard | queue name | **Consumer driven** | **Yes** (getMaxScript, getBatchScript, storeAndConsumeScript,  No |removeFromQueueScript, requeueItemsScript, lenScript, moveScript, parkScript, removeByFieldValueScript, removeByFieldPrefixScript, parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript, appendShardsToBlackListScript, getBlackListValuesByShardName, getBlackListedShardsListWithValues, produceWidthIDScript, restoreScript) |
+| `reporting:ReportRequests_<SHARD_ID>` | SortedSet | Used to store enqueued items for every shard | queue name | **Consumer driven** | **Yes** (getMaxScript, getBatchScript, storeAndConsumeScript, removeFromQueueScript, requeueItemsScript, lenScript, moveScript, parkScript, removeByFieldValueScript, removeByFieldPrefixScript, parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript, appendShardsToBlackListScript, getBlackListValuesByShardName, getBlackListedShardsListWithValues, produceWidthIDScript, restoreScript) | No |
 | `reporting:ReportCallbackRequests` | List | Circular list of tenants in the queue, to implement Round Robin between shards | queue name | No | **Yes** (see above) | No |
 | `reporting:ReportCallbackRequests:deficit` | Hash | Keeps shard's deficit, to implement fairness | queue name | No | **Yes** (see above) | No |
 | `reporting:ReportCallbackRequests:blacklist:<SHARD_ID>` | String | Used to flag a shard as blacklisted, no items will be dequeued for it | queue name | No | **Yes** (see above) | No |
@@ -44,7 +44,7 @@
 | `reporting:GeneratorResponses:producecheck` | String | ??? | queue name | No | **Yes** (see above) | No |
 | `reporting:GeneratorResponses_<SHARD_ID>` | SortedSet | Used to store enqueued items for every shard | queue name | **Consumer driven** | **Yes** (see above) | No |
 | `<ITEM_UUID>`: | String | Keepalive key for an item in the queue | queue name | No | **Yes** (see above) | No |
-| `reporting:parkhashes:<TENANT_ID>:<CONN_TYPE>:<APP_ID>:<USER_ID>:<SELECTION_HASH>` | Hash ||| **Consumer driven** | **Yes** (parkOrRequeueScript, moveParkedItemsToQueueScript,  No |moveParkedItemsToQueueReturnFieldValuesScript) |
+| `reporting:parkhashes:<TENANT_ID>:<CONN_TYPE>:<APP_ID>:<USER_ID>:<SELECTION_HASH>` | Hash ||| **Consumer driven** | **Yes** (parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript) | No |
 | `reporting:parkhashes:rdr-<SESSION_ID>` | Hash ||| **Consumer driven** | **Yes** (parkOrRequeueScript, moveParkedItemsToQueueScript, moveParkedItemsToQueueReturnFieldValuesScript) | No |
 
 ## Encryption Plain Key Cache
@@ -58,7 +58,7 @@
 
 | Key Name | Type | Description | Can be sharded by... | Contains PII? | Used by LUA scripts? | Migrated to ElastiCache with TLV-938? |
 |---------|---------|---------|---------|---------|---------|---------|
-| `repsvc:qix.session:` ||||  **Yes** (JWT)  | No | **Yes** | No |
+| `repsvc:qix.session:` ||||  **Yes** (JWT)  | No | No |
 | `repsvc:<WORKLOAD_TYPE>:workload_session_count` | String ||| No | **Yes** (getSessionScript, removeSessionScript) | No |
 | `repsvc:<WORKLOAD_TYPE>:workload_session_scan_start` | String ||| No | **Yes** (getSessionScript) | No |
 | `repsvc:<WORKLOAD_TYPE>:session_count` | String ||| No | **Yes** (releaseSessionScript, setSessionActiveScript, getSessionScript, removeSessionScript) | No |
